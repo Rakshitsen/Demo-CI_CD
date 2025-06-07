@@ -29,8 +29,6 @@ phases:
   post_build:
     commands:
       - echo "Post-build phase..."
-      - echo "Creating deployment package..."
-      - echo "Build ID: $CODEBUILD_BUILD_ID"
       - echo "Build completed at: $(date)"
 
 artifacts:
