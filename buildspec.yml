@@ -21,7 +21,10 @@ phases:
     commands:
       - echo "Running tests..."
       - python -m pytest test_app.py -v
-      - echo "Build completed successfully!"
+      - echo "Building Docker image..."
+      - docker build -t flask-cicd-demo:$CODEBUILD_BUILD_NUMBER .
+      - docker build -t flask-cicd-demo:latest .
+      - echo "Docker image built successfully!"
       
   post_build:
     commands:
