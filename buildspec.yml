@@ -1,0 +1,40 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      python: 3.9
+    commands:
+      - echo "Installing dependencies..."
+      - pip install --upgrade pip
+      - pip install -r requirements.txt
+      
+  pre_build:
+    commands:
+      - echo "Running pre-build checks..."
+      - echo "Current directory: $(pwd)"
+      - echo "Python version: $(python --version)"
+      - echo "Pip version: $(pip --version)"
+      - echo "Environment: $ENVIRONMENT"
+      
+  build:
+    commands:
+      - echo "Running tests..."
+      - python -m pytest test_app.py -v
+      - echo "Build completed successfully!"
+      
+  post_build:
+    commands:
+      - echo "Post-build phase..."
+      - echo "Creating deployment package..."
+      - echo "Build ID: $CODEBUILD_BUILD_ID"
+      - echo "Build completed at: $(date)"
+
+artifacts:
+  files:
+    - '**/*'
+  name: flask-app-$CODEBUILD_BUILD_NUMBER
+
+cache:
+  paths:
+    - '/root/.cache/pip/**/*'
