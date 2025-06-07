@@ -12,24 +12,32 @@ phases:
   pre_build:
     commands:
       - echo "Running pre-build checks..."
-      - echo "Current directory: $(pwd)"
-      - echo "Python version: $(python --version)"
-      - echo "Pip version: $(pip --version)"
-      - echo "Environment: $ENVIRONMENT"
+      - echo "Current directory $(pwd)"
+      - echo "Python version $(python --version)"
+      - echo "Docker version $(docker --version)"
+      - echo "Environment $ENVIRONMENT"
       
   build:
     commands:
       - echo "Running tests..."
       - python -m pytest test_app.py -v
+      - echo "Tests passed successfully!"
       - echo "Building Docker image..."
-      - docker build -t flask-cicd-demo:$CODEBUILD_BUILD_NUMBER .
       - docker build -t flask-cicd-demo:latest .
+      - docker build -t flask-cicd-demo:$CODEBUILD_BUILD_NUMBER .
       - echo "Docker image built successfully!"
       
   post_build:
     commands:
       - echo "Post-build phase..."
-      - echo "Build completed at: $(date)"
+      - echo "Testing Docker image..."
+      # - docker run -d -p 5000:5000 --name test-container flask-cicd-demo:latest
+      # - sleep 10
+      # - docker logs test-container
+      # - docker stop test-container
+      # - docker rm test-container
+      - echo "Build ID $CODEBUILD_BUILD_ID"
+      - echo "Build completed at $(date)"
 
 artifacts:
   files:
